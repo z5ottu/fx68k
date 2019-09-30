@@ -63,7 +63,8 @@ module fx68k(
     wire Clks_clk;
     wire Clks_extReset;         // External sync reset on emulated system
     wire Clks_pwrUp;            // Asserted together with reset on emulated system coldstart
-    wire Clks_enPhi1, enPhi2;   // Clock enables. Next cycle is PHI1 or PHI2
+    wire Clks_enPhi1;
+    wire Clks_enPhi2;   // Clock enables. Next cycle is PHI1 or PHI2
     
     assign Clks_clk = clk;  
     assign Clks_extReset = extReset;

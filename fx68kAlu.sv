@@ -771,7 +771,7 @@ module ccrTable(
 		XNKVC	= 5'b11011,	// Used by BCD instructions. Don't modify Z at all at the binary operation. Only at the BCD correction cycle
 		
 		CUPDALL = 5'b11111,
-		CUNUSED = 5'bxxxxx;
+		CUNUSED = 5'b00000; //5'bxxxxx;
     
 
 	logic [MASK_NBITS-1:0] ccrMask1;
@@ -781,7 +781,7 @@ module ccrTable(
 		1:			ccrMask = ccrMask1;
 		
 		2,3:
-			case( 1'b1)
+			unique case( 1'b1)
 			row[1]:		ccrMask = KNZ0C;		// DIV, used as 3n in col3
 			
 			row[3],								// ABCD
