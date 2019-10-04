@@ -1169,6 +1169,26 @@ localparam REG_DT = 17;
 	
 	// For simulation display only
 	wire [31:0] SSP = { regs68H[REG_SSP], regs68L[REG_SSP]};
+    `ifdef SIMULATION
+    wire [31:0] sim_regs0 = { regs68H[0], regs68L[0] };
+    wire [31:0] sim_regs1 = { regs68H[1], regs68L[1] };
+    wire [31:0] sim_regs2 = { regs68H[2], regs68L[2] };
+    wire [31:0] sim_regs3 = { regs68H[3], regs68L[3] };
+    wire [31:0] sim_regs4 = { regs68H[4], regs68L[4] };
+    wire [31:0] sim_regs5 = { regs68H[5], regs68L[5] };
+    wire [31:0] sim_regs6 = { regs68H[6], regs68L[6] };
+    wire [31:0] sim_regs7 = { regs68H[7], regs68L[7] };
+    wire [31:0] sim_regs8 = { regs68H[8], regs68L[8] };
+    wire [31:0] sim_regs9 = { regs68H[9], regs68L[9] };
+    wire [31:0] sim_regs10 = { regs68H[10], regs68L[10] };
+    wire [31:0] sim_regs11 = { regs68H[11], regs68L[11] };
+    wire [31:0] sim_regs12 = { regs68H[12], regs68L[12] };
+    wire [31:0] sim_regs13 = { regs68H[13], regs68L[13] };
+    wire [31:0] sim_regs14 = { regs68H[14], regs68L[14] };
+    wire [31:0] sim_regs15 = { regs68H[15], regs68L[15] };
+    wire [31:0] sim_regs16 = { regs68H[16], regs68L[16] };
+    wire [31:0] sim_regs17 = { regs68H[17], regs68L[17] };
+    `endif
 	
 // synthesis translate on
 	
