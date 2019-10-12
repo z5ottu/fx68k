@@ -781,7 +781,7 @@ module ccrTable(
 		1:			ccrMask = ccrMask1;
 		
 		2,3:
-			unique case( 1'b1)
+			/*unique */case( 1'b1)
 			row[1]:		ccrMask = KNZ0C;		// DIV, used as 3n in col3
 			
 			row[3],								// ABCD
