@@ -787,7 +787,7 @@ module fx68k(
         end
     end
     
-    always_comb begin
+    always @(*) begin
         if( inExcept01) begin
             // Unique IF !!!
             if( tvnLatch == TVN_SPURIOUS)
@@ -1214,7 +1214,7 @@ module irdDecode( input [15:0] ird,
         
     // rx is A or D
     // movem
-    always_comb begin
+    always @(*) begin
         case( 1'b1)
         lineOnehot[1],
         lineOnehot[2],
@@ -1238,7 +1238,7 @@ module irdDecode( input [15:0] ird,
     end 
 
     // RX is movem
-    always_comb begin
+    always @(*) begin
         Irdecod_rxIsMovem = lineOnehot[4] & ~ird[8] & ~Irdecod_implicitSp;
     end
     assign Irdecod_movemPreDecr = Irdecod_rxIsMovem & isPreDecr;
@@ -1259,7 +1259,7 @@ module irdDecode( input [15:0] ird,
     assign Irdecod_ryIsDt = eaImmOrAbs & ~isRegShift;
         
     // RY is Address register
-    always_comb begin
+    always @(*) begin
         logic eaIsAreg;
         
         // On most cases RY is Areg expect if mode is 000 (DATA REG) or 111 (IMM, ABS,PC REL)
@@ -1288,7 +1288,7 @@ module irdDecode( input [15:0] ird,
         
     wire xIsScc = (ird[7:6] == 2'b11) & (ird[5:3] != 3'b001); 
     wire xStaticMem = (ird[11:8] == 4'b1000) & (ird[5:4] == 2'b00);     // Static bit to mem
-    always_comb begin
+    always@(*) begin
         case( 1'b1)
         lineOnehot[0]:
                 Irdecod_isByte = 
@@ -1323,7 +1323,7 @@ module irdDecode( input [15:0] ird,
     // This logic is simple and will include some instructions that don't actually reference SP.
     // But doesn't matter as long as they don't perform any RX transfer.
     
-    always_comb begin
+    always@(*) begin
         case( 1'b1)
         lineOnehot[6]:      Irdecod_implicitSp = (ird[11:8] == 4'b0001);        // BSR
         lineOnehot[4]:
@@ -1345,7 +1345,7 @@ module irdDecode( input [15:0] ird,
     logic [15:0] ftuConst;
     wire [3:0] zero28 = (ird[11:9] == 0) ? 4'h8 : { 1'b0, ird[11:9]};       // xltate 0,1-7 into 8,1-7
 
-    always_comb begin
+    always@(*) begin
         case( 1'b1)
         lineOnehot[6],                                                      // Bcc short
         lineOnehot[7]:      ftuConst = { { 8{ ird[ 7]}}, ird[ 7:0] };       // MOVEQ
@@ -1368,7 +1368,7 @@ module irdDecode( input [15:0] ird,
     // TRAP Vector # for group 2 exceptions
     //
     
-    always_comb begin
+    always@(*) begin
         if( lineOnehot[4]) begin
             case ( ird[6:5])
             2'b00,2'b01:    Irdecod_macroTvn = 6;                   // CHK
@@ -1578,7 +1578,7 @@ localparam REG_DT = 17;
     logic rxIsSp, ryIsSp;
     logic rxIsAreg, ryIsAreg;
     
-    always_comb begin
+    always @(*) begin
     
         // Unique IF !!
         if( Nanod_ssp) begin
@@ -1663,7 +1663,7 @@ localparam REG_DT = 17;
     logic abhIdle, ablIdle, abdIdle;
     logic dbhIdle, dblIdle, dbdIdle;
     
-    always_comb begin
+    always @(*) begin
         {abhIdle, ablIdle, abdIdle} = '0;
         {dbhIdle, dblIdle, dbdIdle} = '0;
 
@@ -1817,7 +1817,7 @@ localparam REG_DT = 17;
     // Old Modelsim bug. Doesn't update ouput always. Need excplicit sensitivity list !?
     // always @( Nanod_auCntrl) begin
     
-    always_comb begin
+    always @(*) begin
         case( Nanod_auCntrl)
         3'b000:     auInpMux = 0;
         3'b001:     auInpMux = byteNotSpAlign | Nanod_noSpAlign ? 1 : 2;        // +1/+2
@@ -2004,7 +2004,7 @@ localparam REG_DT = 17;
     logic [15:0] dobInput;
     wire dobIdle = (~| Nanod_dobCtrl);
     
-    always_comb begin
+    always @(*) begin
         case (Nanod_dobCtrl)
         NANO_DOB_ADB:       dobInput = Abd;
         NANO_DOB_DBD:       dobInput = Dbd;
@@ -2348,7 +2348,7 @@ module uaddrDecode(
     STOP
     */
     
-    always_comb begin
+    always @(*) begin
         case( lineBmap)
            
         // ori/andi/eori SR      
@@ -2381,7 +2381,7 @@ endmodule
 
 // bin to one-hot, 4 bits to 16-bit bitmap
 module onehotEncoder4( input [3:0] bin, output reg [15:0] bitMap);
-    always_comb begin
+    always @(*) begin
     case( bin)
         'b0000:   bitMap = 16'h0001;
         'b0001:   bitMap = 16'h0002;
@@ -2470,7 +2470,7 @@ module sequencer(
 
     // Group 0 exception.
     // Separated block from regular NMA. Otherwise simulation might depend on order of assigments.
-    always_comb begin
+    always @(*) begin
         if( A0Err) begin
             if( a0Rst)                  // Reset
                 nma = RSTP0_NMA;
@@ -2483,7 +2483,7 @@ module sequencer(
             nma = uNma;
     end
 
-    always_comb begin
+    always @(*) begin
         // Format II (conditional) or I (direct branch)
         if( microLatch[1])
             uNma = { microLatch[ 14:13], c0c1, microLatch[ 10:7], microLatch[ 12:11]};      
@@ -2507,7 +2507,7 @@ module sequencer(
     logic ccTest;
     wire [4:0] cbc = microLatch[ 6:2];          // CBC bits
     
-    always_comb begin
+    always @(*) begin
         case( cbc)
         'h0:    c0c1 = {i11, i11};                      // W/L offset EA, from IRC
 
@@ -2579,7 +2579,7 @@ module sequencer(
     end
     
     // CCR conditional
-    always_comb begin
+    always @(*) begin
         case( Ird[ 11:8])       
         'h0: ccTest = 1'b1;                     // T
         'h1: ccTest = 1'b0;                     // F
@@ -2638,7 +2638,7 @@ module sequencer(
     end
 
     // exception priority
-    always_comb begin
+    always @(*) begin
         grp1Nma = TRAC1_NMA;
         if( rExcRst)
             tvn = '0;                           // Might need to change that to signal in exception
@@ -2697,7 +2697,7 @@ module busArbiter(
     localparam [2:0] DRESET = 3'd0, DIDLE=3'd1, D1=3'd2, D_BR=3'd3, D_BA=3'd4, D_BRA=3'd5, D3=3'd6, D2=3'd7;
     reg [2:0] dmaPhase, next;
 
-    always_comb begin
+    always @(*) begin
         case(dmaPhase)
         DRESET: next = DIDLE;
         DIDLE:  begin
@@ -2743,7 +2743,7 @@ module busArbiter(
     end
         
     logic granting;
-    always_comb begin
+    always @(*) begin
         case( next)
         D1, D3, D_BR, D_BRA:    granting = 1'b1;
         default:                granting = 1'b0;
@@ -2834,7 +2834,7 @@ module busControl(
             busPhase <= next;
     end
     
-    always_comb begin
+    always @(*) begin
         case( busPhase)
         SRESET:     next = SIDLE;
         SRMC_RES:   next = SIDLE;           // Single cycle special state when read phase of RMC reset

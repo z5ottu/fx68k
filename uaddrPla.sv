@@ -64,7 +64,7 @@ module pla_lined(
    
    /*
    reg [`NMA_BITS-1:0] lineMask[ 15:0];  
-   always_comb begin
+   always @(*) begin
        integer i;
        for( i = 0; i < 16; i = i + 1)
          lineMask[i] = { 16{lineBmap[ i]}};
@@ -80,7 +80,7 @@ module pla_lined(
    
    
    // Simple lines
-   always_comb begin
+   always @(*) begin
       // Line 6: Branch
       arIll[ 'h6] = 1'b0;
       arA23[ 'h6] = 'X;
@@ -104,7 +104,7 @@ module pla_lined(
    // Special lines
 
    // Line e: shifts
-   always_comb begin
+   always @(*) begin
       if( ~opcode[11] & opcode[7] & opcode[6])
       begin
          arA23[ 'he] = `SFTM1;
@@ -138,7 +138,7 @@ module pla_lined(
    end
 
    // Misc. line 4 row
-   always_comb begin
+   always @(*) begin
       illMisc = 1'b0;
       case( opcode[ 5:3])
       3'b000,
@@ -172,7 +172,7 @@ module pla_lined(
 //
 // Line: 0
 //
-always_comb begin
+always @(*) begin
 
 if( (opcode[11:6] & 'h1F) == 'h8) begin
     case ( col)
@@ -542,7 +542,7 @@ end
 //
 // Line: 4
 //
-always_comb begin
+always @(*) begin
 
 if( (opcode[11:6] & 'h27) == 'h0) begin
     case ( col)
@@ -894,7 +894,7 @@ else begin arIll[ 'h4] = 1'b1; arA1[ 'h4] = 'X   ; arA23[ 'h4] = 'X; end
 
 end
 
-always_comb begin
+always @(*) begin
 
 //
 // Line: 1
