@@ -52,6 +52,7 @@ module fx68k(
     output BGn,
     output oRESETn, output oHALTEDn,
     input DTACKn, input VPAn,
+    input HALTn, 
     input BERRn,
     input BRn, BGACKn,
     input IPL0n, input IPL1n, input IPL2n,
